@@ -6,8 +6,6 @@ import com.tencent.bugly.crashreport.CrashReport;
 import com.tttrtclive.callback.MyTTTRtcEngineEventHandler;
 import com.wushuangtech.wstechapi.TTTRtcEngine;
 
-import java.util.Random;
-
 public class MainApplication extends Application {
 
     public MyTTTRtcEngineEventHandler mMyTTTRtcEngineEventHandler;

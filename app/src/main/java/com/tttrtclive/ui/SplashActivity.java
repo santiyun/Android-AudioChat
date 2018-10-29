@@ -21,7 +21,6 @@ import com.tttrtclive.callback.MyTTTRtcEngineEventHandler;
 import com.tttrtclive.utils.MyLog;
 import com.tttrtclive.utils.SharedPreferencesUtil;
 import com.wushuangtech.jni.NativeInitializer;
-import com.wushuangtech.library.Constants;
 import com.wushuangtech.utils.PviewLog;
 import com.wushuangtech.wstechapi.TTTRtcEngine;
 import com.yanzhenjie.permission.AndPermission;
@@ -42,6 +41,10 @@ public class SplashActivity extends BaseActivity {
     private MyLocalBroadcastReceiver mLocalBroadcast;
     private String mRoomName;
     private long mUserId;
+
+    /*-------------------------------配置参数---------------------------------*/
+    private boolean mUseHQAudio = false;
+    /*-------------------------------配置参数---------------------------------*/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,9 +67,6 @@ public class SplashActivity extends BaseActivity {
 
         // 注册回调函数接收的广播
         mLocalBroadcast = new MyLocalBroadcastReceiver();
-        IntentFilter filter = new IntentFilter();
-        filter.addAction(MyTTTRtcEngineEventHandler.TAG);
-        registerReceiver(mLocalBroadcast, filter);
         MyLog.d("SplashActivity onCreate.... model : " + Build.MODEL);
         mDialog = new ProgressDialog(this);
         mDialog.setTitle("");
@@ -85,10 +85,16 @@ public class SplashActivity extends BaseActivity {
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        MyLog.d("SplashActivity onDestroy....");
-        TTTRtcEngine.destroy();
+    protected void onResume() {
+        super.onResume();
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(MyTTTRtcEngineEventHandler.TAG);
+        registerReceiver(mLocalBroadcast, filter);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
         try {
             unregisterReceiver(mLocalBroadcast);
         } catch (Exception e) {
@@ -96,14 +102,21 @@ public class SplashActivity extends BaseActivity {
         }
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        MyLog.d("SplashActivity onDestroy....");
+        TTTRtcEngine.destroy();
+    }
+
     public void onClickEnterButton(View v) {
         mRoomName = mRoomIDET.getText().toString().trim();
         if (TextUtils.isEmpty(mRoomName)) {
-            Toast.makeText(this, "房间ID为空", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "房间ID不能为空", Toast.LENGTH_SHORT).show();
             return;
         }
         if (TextUtils.getTrimmedLength(mRoomName) > 18) {
-            Toast.makeText(this, "房间ID太大", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "房间ID不能超过19位", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -115,11 +128,22 @@ public class SplashActivity extends BaseActivity {
 
         // 保存配置
         SharedPreferencesUtil.setParam(this, "RoomID", mRoomName);
-
         mTTTEngine.joinChannel("", mRoomName, mUserId);
         mDialog.show();
         return;
 
+    }
+
+    public void onSetButtonClick(View v) {
+        Intent intent = new Intent(this, SetActivity.class);
+        intent.putExtra("HQA", mUseHQAudio);
+        startActivityForResult(intent, 1);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
+        mUseHQAudio = intent.getBooleanExtra("HQA", mUseHQAudio);
     }
 
     private class MyLocalBroadcastReceiver extends BroadcastReceiver {

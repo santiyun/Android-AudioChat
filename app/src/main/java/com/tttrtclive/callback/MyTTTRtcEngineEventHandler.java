@@ -6,13 +6,10 @@ import android.content.Intent;
 import com.tttrtclive.bean.JniObjs;
 import com.tttrtclive.ui.MainActivity;
 import com.tttrtclive.utils.MyLog;
-import com.wushuangtech.bean.ChatInfo;
-import com.wushuangtech.bean.ConfVideoFrame;
 import com.wushuangtech.bean.LocalAudioStats;
 import com.wushuangtech.bean.LocalVideoStats;
 import com.wushuangtech.bean.RemoteAudioStats;
 import com.wushuangtech.bean.RemoteVideoStats;
-import com.wushuangtech.bean.RtcStats;
 import com.wushuangtech.wstechapi.TTTRtcEngineEventHandler;
 
 import java.util.ArrayList;
@@ -44,7 +41,7 @@ import static com.tttrtclive.LocalConstans.CALL_BACK_ON_USER_ROLE_CHANGED;
 
 public class MyTTTRtcEngineEventHandler extends TTTRtcEngineEventHandler {
 
-    public static final String TAG = "MyTTTRtcEngineEventHandlerMM";
+    public static final String TAG = "MyTTTRtcEngineEventHandlerMMAUDIO";
     public static final String MSG_TAG = "MyTTTRtcEngineEventHandlerMSGMM";
     private boolean mIsSaveCallBack;
     private List<JniObjs> mSaveCallBack;
@@ -163,8 +160,6 @@ public class MyTTTRtcEngineEventHandler extends TTTRtcEngineEventHandler {
 
     @Override
     public void onRemoteVideoStats(RemoteVideoStats stats) {
-//        MyLog.i("wzg", "onRemoteVideoStats.... uid : " + stats.getUid() + " | bitrate : " + stats.getReceivedBitrate()
-//                + " | framerate : " + stats.getReceivedFrameRate());
         JniObjs mJniObjs = new JniObjs();
         mJniObjs.mJniType = CALL_BACK_ON_REMOTE_VIDEO_STATE;
         mJniObjs.mRemoteVideoStats = stats;
@@ -177,7 +172,6 @@ public class MyTTTRtcEngineEventHandler extends TTTRtcEngineEventHandler {
 
     @Override
     public void onRemoteAudioStats(RemoteAudioStats stats) {
-//        MyLog.i("wzg", "RemoteAudioStats.... uid : " + stats.getUid() + " | bitrate : " + stats.getReceivedBitrate());
         JniObjs mJniObjs = new JniObjs();
         mJniObjs.mJniType = CALL_BACK_ON_REMOTE_AUDIO_STATE;
         mJniObjs.mRemoteAudioStats = stats;
@@ -254,11 +248,6 @@ public class MyTTTRtcEngineEventHandler extends TTTRtcEngineEventHandler {
     }
 
     @Override
-    public void onSpeechRecognized(String str) {
-
-    }
-
-    @Override
     public void onAudioRouteChanged(int routing) {
         MyLog.i("wzg", "onAudioRouteChanged.... routing : " + routing);
         MainActivity.mCurrentAudioRoute = routing;
@@ -273,42 +262,6 @@ public class MyTTTRtcEngineEventHandler extends TTTRtcEngineEventHandler {
     }
 
     @Override
-    public void onLeaveChannel(RtcStats stats) {
-        MyLog.i("wzg", "onLeaveChannel....");
-    }
-
-    @Override
-    public void onRemoteVideoDecoded(long uid, ConfVideoFrame mFrame) {
-//        MyLog.i("wzg", "onRemoteVideoDecoded.... uid : " + uid + " | width : " + mFrame.stride
-//                + " | height : " + mFrame.height);
-    }
-
-    @Override
-    public void onFirstRemoteVideoDecoded(long uid, int width, int height) {
-//        MyLog.i("wzg", "onFirstRemoteVideoDecoded.... uid ： " + uid + " | width : " + width + " | height : " + height);
-    }
-
-    @Override
-    public void onFirstLocalVideoFrame(int width, int height) {
-        MyLog.i("wzg", "onFirstLocalVideoFrame.... width : " + width + " | height : " + height);
-    }
-
-    @Override
-    public void OnChatMessageSent(ChatInfo chatInfo, int error) {
-        MyLog.i("wzg", "OnChatMessageSent: ");
-    }
-
-    @Override
-    public void OnSignalSent(String sSeqID, int error) {
-        MyLog.i("wzg", "OnSignalSent: ");
-    }
-
-    @Override
-    public void OnChatMessageRecived(long nSrcUserID, ChatInfo chatInfo) {
-        MyLog.i("wzg", "OnChatMessageRecived: ");
-    }
-
-    @Override
     public void onUserRoleChanged(long userID, int userRole) {
         MyLog.i("wzg", "onUserRoleChanged... userID : " + userID + " userRole : " + userRole);
         JniObjs mJniObjs = new JniObjs();
@@ -320,21 +273,6 @@ public class MyTTTRtcEngineEventHandler extends TTTRtcEngineEventHandler {
         } else {
             sendMessage(mJniObjs);
         }
-    }
-
-    @Override
-    public void OnSignalRecived(long nSrcUserID, String sSeqID, String strData) {
-        MyLog.i("wzg", "OnSignalRecived: ");
-    }
-
-    @Override
-    public void onPlayChatAudioCompletion(String filePath) {
-        MyLog.d("wzg", "onPlayChatAudioCompletion: ");
-    }
-
-    @Override
-    public void onRtcStats(RtcStats stats) {
-//        MyLog.i("wzg", "onRtcStats....  " + stats.toString());
     }
 
     @Override

@@ -7,12 +7,6 @@
 	android:layout_height="match_parent">
 
 	<ImageView
-		android:id="@+id/imageView6"
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:background="@drawable/dingbuyinying" />
-
-	<ImageView
 		android:id="@+id/audio_bg"
 		android:layout_width="200dp"
 		android:layout_height="200dp"
@@ -55,7 +49,7 @@
 		android:layout_marginTop="16dp"
 		android:singleLine="true"
 		android:text="房号："
-		android:textColor="@color/font_com_color_white"
+		android:textColor="#6a6a6a"
 		android:textSize="@dimen/font_com_size_12"
 		app:layout_constraintStart_toEndOf="@+id/main_btn_audio_channel"
 		app:layout_constraintTop_toTopOf="parent" />
@@ -69,7 +63,7 @@
 		android:layout_toRightOf="@id/main_btn_title"
 		android:singleLine="true"
 		android:text="ID："
-		android:textColor="@color/font_com_color_white"
+		android:textColor="#6a6a6a"
 		android:textSize="@dimen/font_com_size_12"
 		app:layout_constraintStart_toEndOf="@+id/main_btn_title"
 		app:layout_constraintTop_toTopOf="parent" />
@@ -81,7 +75,7 @@
 		android:layout_marginTop="8dp"
 		android:singleLine="true"
 		android:text="@string/main_audioup"
-		android:textColor="@color/font_com_color_white"
+		android:textColor="#6a6a6a"
 		android:textSize="@dimen/font_com_size_12"
 		app:layout_constraintStart_toStartOf="@+id/main_btn_title"
 		app:layout_constraintTop_toBottomOf="@+id/main_btn_title" />
@@ -98,20 +92,12 @@
 		app:layout_constraintEnd_toEndOf="parent"
 		app:layout_constraintTop_toTopOf="parent" />
 
-	<ImageView
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:layout_alignParentBottom="true"
-		android:background="@drawable/dibuyinying"
-		app:layout_constraintBottom_toBottomOf="parent"
-		app:layout_constraintEnd_toEndOf="parent"
-		app:layout_constraintStart_toStartOf="parent" />
-
-	<ImageView
-		android:id="@+id/imageView3"
+	<View
+		android:id="@+id/view"
 		android:layout_width="0dp"
-		android:layout_height="wrap_content"
-		android:background="@drawable/dingbuyinying"
+		android:layout_height="0dp"
+		android:background="#c6c6c6"
+		app:layout_constraintBottom_toBottomOf="parent"
 		app:layout_constraintEnd_toEndOf="parent"
 		app:layout_constraintStart_toStartOf="parent"
 		app:layout_constraintTop_toTopOf="@+id/remote2" />
@@ -134,6 +120,8 @@
 		android:layout_width="0dp"
 		android:layout_height="0dp"
 		android:layout_marginBottom="1dp"
+		android:layout_marginEnd="1dp"
+		android:layout_marginStart="1dp"
 		app:layout_constraintBottom_toTopOf="@+id/remote5"
 		app:layout_constraintDimensionRatio="3:4"
 		app:layout_constraintEnd_toStartOf="@+id/remote3"
@@ -155,29 +143,10 @@
 
 	</com.tttrtclive.Helper.AudioRemoteWindow>
 
-	<ImageView
-		android:id="@+id/imageView4"
-		android:layout_width="0dp"
-		android:layout_height="wrap_content"
-		android:background="@drawable/dibuyinying"
-		app:layout_constraintBottom_toBottomOf="@+id/remote2"
-		app:layout_constraintEnd_toEndOf="parent"
-		app:layout_constraintStart_toStartOf="parent" />
-
-	<ImageView
-		android:id="@+id/imageView5"
-		android:layout_width="0dp"
-		android:layout_height="wrap_content"
-		android:background="@drawable/dingbuyinying"
-		app:layout_constraintEnd_toEndOf="parent"
-		app:layout_constraintStart_toStartOf="parent"
-		app:layout_constraintTop_toTopOf="@+id/remote5" />
-
 	<com.tttrtclive.Helper.AudioRemoteWindow
 		android:id="@+id/remote4"
 		android:layout_width="0dp"
 		android:layout_height="0dp"
-		android:layout_marginBottom="8dp"
 		app:layout_constraintBottom_toBottomOf="parent"
 		app:layout_constraintDimensionRatio="3:4"
 		app:layout_constraintEnd_toStartOf="@+id/remote5"
@@ -190,7 +159,8 @@
 		android:id="@+id/remote5"
 		android:layout_width="0dp"
 		android:layout_height="0dp"
-		android:layout_marginBottom="8dp"
+		android:layout_marginEnd="1dp"
+		android:layout_marginStart="1dp"
 		app:layout_constraintBottom_toBottomOf="parent"
 		app:layout_constraintDimensionRatio="3:4"
 		app:layout_constraintEnd_toStartOf="@+id/remote6"
@@ -203,7 +173,6 @@
 		android:id="@+id/remote6"
 		android:layout_width="0dp"
 		android:layout_height="0dp"
-		android:layout_marginBottom="8dp"
 		app:layout_constraintBottom_toBottomOf="parent"
 		app:layout_constraintDimensionRatio="3:4"
 		app:layout_constraintEnd_toEndOf="parent"
