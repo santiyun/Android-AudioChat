@@ -83,8 +83,8 @@ public class MainActivity extends BaseActivity {
     }
 
     private void initView() {
-        mAudioSpeedShow = (TextView) findViewById(R.id.main_btn_audioup);
-        mAudioChannel = (ImageView) findViewById(R.id.main_btn_audio_channel);
+        mAudioSpeedShow = findViewById(R.id.main_btn_audioup);
+        mAudioChannel = findViewById(R.id.main_btn_audio_channel);
 
         Intent intent = getIntent();
         long roomId = intent.getLongExtra("ROOM_ID", 0);
@@ -106,7 +106,7 @@ public class MainActivity extends BaseActivity {
         findViewById(R.id.main_btn_audio_ysq).setOnClickListener(v -> {
             if (mIsHeadset) return;
             mIsYsq = !mIsYsq;
-            ((ImageView)v).setImageResource(mIsYsq ? R.drawable.mainly_btn_ysq_selector : R.drawable.mainly_btn_tt_selector);
+            ((ImageView) v).setImageResource(mIsYsq ? R.drawable.mainly_btn_ysq_selector : R.drawable.mainly_btn_tt_selector);
             mTTTEngine.setEnableSpeakerphone(mIsYsq);
         });
     }
@@ -168,8 +168,8 @@ public class MainActivity extends BaseActivity {
             if (MyTTTRtcEngineEventHandler.TAG.equals(action)) {
                 JniObjs mJniObjs = intent.getParcelableExtra(MyTTTRtcEngineEventHandler.MSG_TAG);
                 switch (mJniObjs.mJniType) {
-                    case LocalConstans.CALL_BACK_ON_ERROR:
-                        MyLog.d("UI onReceive CALL_BACK_ON_ERROR... ");
+                    case LocalConstans.CALL_BACK_ON_USER_KICK:
+                        MyLog.d("UI onReceive CALL_BACK_ON_USER_KICK... ");
                         String message = "";
                         int errorType = mJniObjs.mErrorType;
                         if (errorType == Constants.ERROR_KICK_BY_HOST) {
@@ -227,7 +227,7 @@ public class MainActivity extends BaseActivity {
 
                     case LocalConstans.CALL_BACK_ON_AUDIO_ROUTE:
                         int mAudioRoute = mJniObjs.mAudioRoute;
-                        if (mAudioRoute == Constants.AUDIO_ROUTE_SPEAKER || mAudioRoute ==  Constants.AUDIO_ROUTE_HEADPHONE) {
+                        if (mAudioRoute == Constants.AUDIO_ROUTE_SPEAKER || mAudioRoute == Constants.AUDIO_ROUTE_HEADPHONE) {
                             mIsHeadset = false;
                             mAudioChannel.setImageResource(mIsMute ? R.drawable.mainly_btn_mute_speaker_selector : R.drawable.mainly_btn_speaker_selector);
                         } else {

@@ -119,25 +119,14 @@
 		android:id="@+id/version"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:layout_marginBottom="8dp"
 		android:layout_marginEnd="8dp"
 		android:layout_marginStart="8dp"
 		android:text="@string/version_info"
 		android:textColor="#FFFFFF"
-		android:textSize="12sp"
-		app:layout_constraintBottom_toTopOf="@+id/sdk_version"
+		android:textSize="10sp"
+		android:layout_marginBottom="16dp"
+		app:layout_constraintBottom_toBottomOf="parent"
 		app:layout_constraintEnd_toEndOf="parent"
 		app:layout_constraintStart_toStartOf="parent" />
-
-	<TextView
-		android:id="@+id/sdk_version"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:layout_marginBottom="16dp"
-		android:text="sdk version:"
-		android:textColor="#FFFFFF"
-		android:textSize="12sp"
-		app:layout_constraintBottom_toBottomOf="parent"
-		app:layout_constraintStart_toStartOf="@+id/version" />
 
 </android.support.constraint.ConstraintLayout>

@@ -20,7 +20,6 @@ import com.tttrtclive.bean.JniObjs;
 import com.tttrtclive.callback.MyTTTRtcEngineEventHandler;
 import com.tttrtclive.utils.MyLog;
 import com.tttrtclive.utils.SharedPreferencesUtil;
-import com.wushuangtech.jni.NativeInitializer;
 import com.wushuangtech.utils.PviewLog;
 import com.wushuangtech.wstechapi.TTTRtcEngine;
 import com.yanzhenjie.permission.AndPermission;
@@ -50,13 +49,19 @@ public class SplashActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.splash_activity);
-
         // 权限申请
         AndPermission.with(this)
                 .permission(Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_PHONE_STATE)
                 .start();
-
         init();
+    }
+
+    private void initView() {
+        mRoomIDET = findViewById(R.id.room_id);
+        TextView mVersion = findViewById(R.id.version);
+        String string = getResources().getString(R.string.version_info);
+        String result = String.format(string, TTTRtcEngine.getInstance().getSdkVersion());
+        mVersion.setText(result);
     }
 
     private void init() {
@@ -71,17 +76,6 @@ public class SplashActivity extends BaseActivity {
         mDialog = new ProgressDialog(this);
         mDialog.setTitle("");
         mDialog.setMessage("正在进入房间...");
-    }
-
-    private void initView() {
-        mRoomIDET = (EditText) findViewById(R.id.room_id);
-        TextView mVersion = (TextView) findViewById(R.id.version);
-        String string = getResources().getString(R.string.version_info);
-        String result = String.format(string, TTTRtcEngine.getInstance().getVersion());
-        mVersion.setText(result);
-
-        TextView mSdkVersion = (TextView) findViewById(R.id.sdk_version);
-        mSdkVersion.setText("sdk version : " + NativeInitializer.getIntance().getVersion());
     }
 
     @Override
@@ -100,13 +94,6 @@ public class SplashActivity extends BaseActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        MyLog.d("SplashActivity onDestroy....");
-        TTTRtcEngine.destroy();
     }
 
     public void onClickEnterButton(View v) {
@@ -130,8 +117,6 @@ public class SplashActivity extends BaseActivity {
         SharedPreferencesUtil.setParam(this, "RoomID", mRoomName);
         mTTTEngine.joinChannel("", mRoomName, mUserId);
         mDialog.show();
-        return;
-
     }
 
     public void onSetButtonClick(View v) {
