@@ -74,7 +74,6 @@
 		android:layout_height="wrap_content"
 		android:layout_marginTop="8dp"
 		android:singleLine="true"
-		android:text="@string/main_audioup"
 		android:textColor="#6a6a6a"
 		android:textSize="@dimen/font_com_size_12"
 		app:layout_constraintStart_toStartOf="@+id/main_btn_title"
