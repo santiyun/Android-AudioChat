@@ -78,6 +78,7 @@ public class MainActivity extends BaseActivity {
             mTelephonyManager = null;
         }
         unregisterReceiver(mLocalBroadcast);
+        mTTTEngine.muteLocalAudioStream(false);
         super.onDestroy();
         MyLog.d("MainActivity onDestroy");
     }
