@@ -8,9 +8,7 @@ import com.tttrtclive.bean.JniObjs;
 import com.tttrtclive.ui.MainActivity;
 import com.tttrtclive.utils.MyLog;
 import com.wushuangtech.expansion.bean.LocalAudioStats;
-import com.wushuangtech.expansion.bean.LocalVideoStats;
 import com.wushuangtech.expansion.bean.RemoteAudioStats;
-import com.wushuangtech.expansion.bean.RemoteVideoStats;
 import com.wushuangtech.wstechapi.TTTRtcEngineEventHandler;
 
 import java.util.ArrayList;
@@ -22,15 +20,11 @@ import static com.tttrtclive.LocalConstans.CALL_BACK_ON_CONNECTLOST;
 import static com.tttrtclive.LocalConstans.CALL_BACK_ON_ENTER_ROOM;
 import static com.tttrtclive.LocalConstans.CALL_BACK_ON_ERROR;
 import static com.tttrtclive.LocalConstans.CALL_BACK_ON_LOCAL_AUDIO_STATE;
-import static com.tttrtclive.LocalConstans.CALL_BACK_ON_LOCAL_VIDEO_STATE;
 import static com.tttrtclive.LocalConstans.CALL_BACK_ON_MUTE_AUDIO;
 import static com.tttrtclive.LocalConstans.CALL_BACK_ON_REMOTE_AUDIO_STATE;
-import static com.tttrtclive.LocalConstans.CALL_BACK_ON_REMOTE_VIDEO_STATE;
-import static com.tttrtclive.LocalConstans.CALL_BACK_ON_REMOVE_FIRST_FRAME_COME;
 import static com.tttrtclive.LocalConstans.CALL_BACK_ON_SEI;
 import static com.tttrtclive.LocalConstans.CALL_BACK_ON_SPEAK_MUTE_AUDIO;
 import static com.tttrtclive.LocalConstans.CALL_BACK_ON_USER_JOIN;
-import static com.tttrtclive.LocalConstans.CALL_BACK_ON_USER_MUTE_VIDEO;
 import static com.tttrtclive.LocalConstans.CALL_BACK_ON_USER_OFFLINE;
 import static com.tttrtclive.LocalConstans.CALL_BACK_ON_USER_ROLE_CHANGED;
 
@@ -132,20 +126,6 @@ public class MyTTTRtcEngineEventHandler extends TTTRtcEngineEventHandler {
     }
 
     @Override
-    public void onUserEnableVideo(long uid, boolean muted) {
-        MyLog.i("wzg", "onUserEnableVideo.... uid : " + uid + " | mute : " + muted);
-        JniObjs mJniObjs = new JniObjs();
-        mJniObjs.mJniType = CALL_BACK_ON_USER_MUTE_VIDEO;
-        mJniObjs.mUid = uid;
-        mJniObjs.mIsEnableVideo = muted;
-        if (mIsSaveCallBack) {
-            saveCallBack(mJniObjs);
-        } else {
-            sendMessage(mJniObjs);
-        }
-    }
-
-    @Override
     public void onAudioVolumeIndication(long nUserID, int audioLevel, int audioLevelFullRange) {
         JniObjs mJniObjs = new JniObjs();
         mJniObjs.mJniType = CALL_BACK_ON_AUDIO_VOLUME_INDICATION;
@@ -159,47 +139,10 @@ public class MyTTTRtcEngineEventHandler extends TTTRtcEngineEventHandler {
     }
 
     @Override
-    public void onFirstRemoteVideoFrame(long uid, int width, int height) {
-        MyLog.i("wzg", "onFirstRemoteVideoFrame.... uid ： " + uid + " | width : " + width + " | height : " + height);
-        JniObjs mJniObjs = new JniObjs();
-        mJniObjs.mJniType = CALL_BACK_ON_REMOVE_FIRST_FRAME_COME;
-        mJniObjs.mUid = uid;
-        if (mIsSaveCallBack) {
-            saveCallBack(mJniObjs);
-        } else {
-            sendMessage(mJniObjs);
-        }
-    }
-
-    @Override
-    public void onRemoteVideoStats(RemoteVideoStats stats) {
-        JniObjs mJniObjs = new JniObjs();
-        mJniObjs.mJniType = CALL_BACK_ON_REMOTE_VIDEO_STATE;
-        mJniObjs.mRemoteVideoStats = stats;
-        if (mIsSaveCallBack) {
-            saveCallBack(mJniObjs);
-        } else {
-            sendMessage(mJniObjs);
-        }
-    }
-
-    @Override
     public void onRemoteAudioStats(RemoteAudioStats stats) {
         JniObjs mJniObjs = new JniObjs();
         mJniObjs.mJniType = CALL_BACK_ON_REMOTE_AUDIO_STATE;
         mJniObjs.mRemoteAudioStats = stats;
-        if (mIsSaveCallBack) {
-            saveCallBack(mJniObjs);
-        } else {
-            sendMessage(mJniObjs);
-        }
-    }
-
-    @Override
-    public void onLocalVideoStats(LocalVideoStats stats) {
-        JniObjs mJniObjs = new JniObjs();
-        mJniObjs.mJniType = CALL_BACK_ON_LOCAL_VIDEO_STATE;
-        mJniObjs.mLocalVideoStats = stats;
         if (mIsSaveCallBack) {
             saveCallBack(mJniObjs);
         } else {

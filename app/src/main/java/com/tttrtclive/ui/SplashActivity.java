@@ -54,7 +54,7 @@ public class SplashActivity extends BaseActivity implements View.OnClickListener
 
         // 权限申请
         AndPermission.with(this)
-                .permission(Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_PHONE_STATE)
+                .permission(Manifest.permission.RECORD_AUDIO, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_PHONE_STATE)
                 .start();
         init();
     }

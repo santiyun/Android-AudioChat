@@ -25,6 +25,7 @@ public class MainApplication extends Application {
                 mMyTTTRtcEngineEventHandler);
         if (mTTTEngine == null) {
             System.exit(0);
+            return ;
         }
 
         if (!isApkDebugable()) {
