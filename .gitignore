@@ -8,3 +8,6 @@
 .externalNativeBuild
 
 /.idea/*
+/local.properties
+/app/libs/*.aar
+/app/release/*

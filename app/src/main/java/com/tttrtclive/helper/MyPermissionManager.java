@@ -1,4 +1,4 @@
-package com.tttrtclive.utils;
+package com.tttrtclive.helper;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -10,7 +10,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.provider.Settings;
 
-import com.tttrtclive.bean.PermissionBean;
+import com.tttrtclive.bean.MyPermissionBean;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +22,6 @@ import androidx.core.content.ContextCompat;
 /**
  * Created by wangzhiguo on 18/3/5.
  */
-
 public class MyPermissionManager {
 
     private PermissionUtilsInter mPermissionUtilsInter;
@@ -38,14 +37,24 @@ public class MyPermissionManager {
         this.mPermissionUtilsInter = Inter;
     }
 
+    public void clearResource(){
+        if (mTipDialog != null) {
+            mTipDialog.dismiss();
+        }
+
+        if (mAskDialog != null) {
+            mAskDialog.dismiss();
+        }
+    }
+
     /**
      * 开始检查权限
      */
     public boolean checkPermission() {
-        List<PermissionBean> mPermissionList = mPermissionUtilsInter.getApplyPermissions();
-        List<PermissionBean> mNeedApply = new ArrayList<>();
+        List<MyPermissionBean> mPermissionList = mPermissionUtilsInter.getApplyPermissions();
+        List<MyPermissionBean> mNeedApply = new ArrayList<>();
         for (int i = 0; i < mPermissionList.size(); i++) {
-            PermissionBean permissionBean = mPermissionList.get(i);
+            MyPermissionBean permissionBean = mPermissionList.get(i);
             int state = ContextCompat.checkSelfPermission(mActivity, permissionBean.mPermissionName);
             // 权限是否已经 授权 GRANTED---授权  DINIED---拒绝
             if (state != PackageManager.PERMISSION_GRANTED) {
@@ -65,8 +74,8 @@ public class MyPermissionManager {
                                                       @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode == REQUEST_PERMISSION_CODE) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                List<PermissionBean> mPermissionList = mPermissionUtilsInter.getApplyPermissions();
-                List<PermissionBean> mApplys = new ArrayList<>();
+                List<MyPermissionBean> mPermissionList = mPermissionUtilsInter.getApplyPermissions();
+                List<MyPermissionBean> mApplys = new ArrayList<>();
                 StringBuilder sb = new StringBuilder();
                 boolean isGoToSetting = false;
                 boolean mIsOk = true;
@@ -106,13 +115,13 @@ public class MyPermissionManager {
     public boolean onActivityResults(int requestCode) {
         if (requestCode == REQUEST_SETTING_CODE) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                List<PermissionBean> mPermissionList = mPermissionUtilsInter.getApplyPermissions();
-                List<PermissionBean> mApplys = new ArrayList<>();
+                List<MyPermissionBean> mPermissionList = mPermissionUtilsInter.getApplyPermissions();
+                List<MyPermissionBean> mApplys = new ArrayList<>();
                 StringBuilder sb = new StringBuilder();
                 boolean isGoToSetting = false;
                 boolean mIsOk = true;
                 for (int i = 0; i < mPermissionList.size(); i++) {
-                    PermissionBean permissionBean = mPermissionList.get(i);
+                    MyPermissionBean permissionBean = mPermissionList.get(i);
                     // 检查该权限是否已经获取
                     int result = ContextCompat.checkSelfPermission(mActivity, permissionBean.mPermissionName);
                     if (result != PackageManager.PERMISSION_GRANTED) {
@@ -182,11 +191,11 @@ public class MyPermissionManager {
         }
     }
 
-    private void showDialogTipUserRequestPermission(final List<PermissionBean> mNeedApply) {
+    private void showDialogTipUserRequestPermission(final List<MyPermissionBean> mNeedApply) {
         String message;
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < mNeedApply.size(); i++) {
-            PermissionBean permissionBean = mNeedApply.get(i);
+            MyPermissionBean permissionBean = mNeedApply.get(i);
             sb.append(permissionBean.mPermissionName).append("\n").append(permissionBean.mPermissionReason).append("\n");
         }
         message = sb.toString();
@@ -231,10 +240,10 @@ public class MyPermissionManager {
     /**
      * 开始提交请求权限
      */
-    private void startRequestPermission(Activity mContext, List<PermissionBean> mNeedApply) {
+    private void startRequestPermission(Activity mContext, List<MyPermissionBean> mNeedApply) {
         String[] mTemps = new String[mNeedApply.size()];
         for (int i = 0; i < mNeedApply.size(); i++) {
-            PermissionBean permissionBean = mNeedApply.get(i);
+            MyPermissionBean permissionBean = mNeedApply.get(i);
             mTemps[i] = permissionBean.mPermissionName;
         }
         ActivityCompat.requestPermissions(mContext, mTemps, REQUEST_PERMISSION_CODE);
@@ -254,7 +263,7 @@ public class MyPermissionManager {
 
     public interface PermissionUtilsInter {
 
-        List<PermissionBean> getApplyPermissions();
+        List<MyPermissionBean> getApplyPermissions();
 
         androidx.appcompat.app.AlertDialog.Builder getTipAlertDialog();
 
