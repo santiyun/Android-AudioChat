@@ -35,8 +35,8 @@ import static com.tttrtclive.LocalConstans.CALL_BACK_ON_USER_ROLE_CHANGED;
 
 public class MyTTTRtcEngineEventHandler extends TTTRtcEngineEventHandler {
 
-    public static final String TAG = "MyTTTRtcEngineEventHandlerMMAUDIO";
-    public static final String MSG_TAG = "MyTTTRtcEngineEventHandlerMSGMMAUDIO";
+    public static final String TAG = "MyTTTRtcEngineEventHandler_AudioChat";
+    public static final String MSG_TAG = "MyTTTRtcEngineEventHandlerMSG_AudioChat";
     private boolean mIsSaveCallBack;
     private List<JniObjs> mSaveCallBack;
     private Context mContext;
@@ -47,7 +47,7 @@ public class MyTTTRtcEngineEventHandler extends TTTRtcEngineEventHandler {
     }
 
     @Override
-    public void onJoinChannelSuccess(String channel, long uid) {
+    public void onJoinChannelSuccess(String channel, long uid, int elapsed) {
         MyLog.i("wzg", "onJoinChannelSuccess.... channel ： " + channel + " | uid : " + uid);
         JniObjs mJniObjs = new JniObjs();
         mJniObjs.mJniType = CALL_BACK_ON_ENTER_ROOM;
@@ -84,7 +84,7 @@ public class MyTTTRtcEngineEventHandler extends TTTRtcEngineEventHandler {
     }
 
     @Override
-    public void onUserJoined(long nUserId, int identity) {
+    public void onUserJoined(long nUserId, int identity, int elapsed) {
         MyLog.i("wzg", "onUserJoined.... nUserId ： " + nUserId + " | identity : " + identity
                 + " | mIsSaveCallBack : " + mIsSaveCallBack);
         JniObjs mJniObjs = new JniObjs();

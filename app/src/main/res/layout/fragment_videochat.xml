@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto"
-	xmlns:tools="http://schemas.android.com/tools"
 	android:id="@+id/main_background"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent">
@@ -101,7 +100,7 @@
 		app:layout_constraintStart_toStartOf="parent"
 		app:layout_constraintTop_toTopOf="@+id/remote2" />
 
-	<com.tttrtclive.Helper.AudioRemoteWindow
+	<com.tttrtclive.helper.AudioRemoteWindow
 		android:id="@+id/remote1"
 		android:layout_width="0dp"
 		android:layout_height="0dp"
@@ -112,9 +111,9 @@
 		app:layout_constraintHorizontal_bias="0.5"
 		app:layout_constraintStart_toStartOf="parent">
 
-	</com.tttrtclive.Helper.AudioRemoteWindow>
+	</com.tttrtclive.helper.AudioRemoteWindow>
 
-	<com.tttrtclive.Helper.AudioRemoteWindow
+	<com.tttrtclive.helper.AudioRemoteWindow
 		android:id="@+id/remote2"
 		android:layout_width="0dp"
 		android:layout_height="0dp"
@@ -127,9 +126,9 @@
 		app:layout_constraintHorizontal_bias="0.5"
 		app:layout_constraintStart_toEndOf="@+id/remote1">
 
-	</com.tttrtclive.Helper.AudioRemoteWindow>
+	</com.tttrtclive.helper.AudioRemoteWindow>
 
-	<com.tttrtclive.Helper.AudioRemoteWindow
+	<com.tttrtclive.helper.AudioRemoteWindow
 		android:id="@+id/remote3"
 		android:layout_width="0dp"
 		android:layout_height="0dp"
@@ -140,9 +139,9 @@
 		app:layout_constraintHorizontal_bias="0.5"
 		app:layout_constraintStart_toEndOf="@+id/remote2">
 
-	</com.tttrtclive.Helper.AudioRemoteWindow>
+	</com.tttrtclive.helper.AudioRemoteWindow>
 
-	<com.tttrtclive.Helper.AudioRemoteWindow
+	<com.tttrtclive.helper.AudioRemoteWindow
 		android:id="@+id/remote4"
 		android:layout_width="0dp"
 		android:layout_height="0dp"
@@ -152,9 +151,9 @@
 		app:layout_constraintHorizontal_bias="0.5"
 		app:layout_constraintStart_toStartOf="parent">
 
-	</com.tttrtclive.Helper.AudioRemoteWindow>
+	</com.tttrtclive.helper.AudioRemoteWindow>
 
-	<com.tttrtclive.Helper.AudioRemoteWindow
+	<com.tttrtclive.helper.AudioRemoteWindow
 		android:id="@+id/remote5"
 		android:layout_width="0dp"
 		android:layout_height="0dp"
@@ -166,9 +165,9 @@
 		app:layout_constraintHorizontal_bias="0.5"
 		app:layout_constraintStart_toEndOf="@+id/remote4">
 
-	</com.tttrtclive.Helper.AudioRemoteWindow>
+	</com.tttrtclive.helper.AudioRemoteWindow>
 
-	<com.tttrtclive.Helper.AudioRemoteWindow
+	<com.tttrtclive.helper.AudioRemoteWindow
 		android:id="@+id/remote6"
 		android:layout_width="0dp"
 		android:layout_height="0dp"
@@ -178,6 +177,6 @@
 		app:layout_constraintHorizontal_bias="0.5"
 		app:layout_constraintStart_toEndOf="@+id/remote5">
 
-	</com.tttrtclive.Helper.AudioRemoteWindow>
+	</com.tttrtclive.helper.AudioRemoteWindow>
 
-</android.support.constraint.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

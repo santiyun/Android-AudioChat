@@ -1,6 +1,7 @@
 package com.tttrtclive.ui;
 
 import android.Manifest;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -17,21 +18,29 @@ import android.widget.Toast;
 import com.tttrtclive.LocalConstans;
 import com.tttrtclive.R;
 import com.tttrtclive.bean.JniObjs;
+import com.tttrtclive.bean.MyPermissionBean;
 import com.tttrtclive.callback.MyTTTRtcEngineEventHandler;
 import com.tttrtclive.utils.MyLog;
+import com.tttrtclive.helper.MyPermissionManager;
 import com.tttrtclive.utils.SharedPreferencesUtil;
 import com.wushuangtech.library.Constants;
 import com.wushuangtech.wstechapi.TTTRtcEngine;
-import com.yanzhenjie.permission.AndPermission;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 
 public class SplashActivity extends BaseActivity implements View.OnClickListener {
 
     private ProgressDialog mDialog;
+    private MyLocalBroadcastReceiver mLocalBroadcast;
+    private MyPermissionManager mMyPermissionManager;
+
     public boolean mIsLoging;
     private EditText mRoomIDET;
-    private MyLocalBroadcastReceiver mLocalBroadcast;
     private String mRoomName;
     private long mUserId;
 
@@ -52,11 +61,68 @@ public class SplashActivity extends BaseActivity implements View.OnClickListener
             }
         }
 
-        // 权限申请
-        AndPermission.with(this)
-                .permission(Manifest.permission.RECORD_AUDIO, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_PHONE_STATE)
-                .start();
-        init();
+        ArrayList<MyPermissionBean> mPermissionList = new ArrayList<>();
+        mPermissionList.add(new MyPermissionBean(Manifest.permission.WRITE_EXTERNAL_STORAGE, getResources().getString(R.string.permission_write_external_storage)));
+        mPermissionList.add(new MyPermissionBean(Manifest.permission.RECORD_AUDIO, getResources().getString(R.string.permission_record_audio)));
+        mPermissionList.add(new MyPermissionBean(Manifest.permission.READ_PHONE_STATE, getResources().getString(R.string.permission_read_phone_state)));
+        mMyPermissionManager = new MyPermissionManager(this, new MyPermissionManager.PermissionUtilsInter() {
+            @Override
+            public List<MyPermissionBean> getApplyPermissions() {
+                return mPermissionList;
+            }
+
+            @Override
+            public AlertDialog.Builder getTipAlertDialog() {
+                return null;
+            }
+
+            @Override
+            public Dialog getTipDialog() {
+                return null;
+            }
+
+            @Override
+            public AlertDialog.Builder getTipAppSettingAlertDialog() {
+                return null;
+            }
+
+            @Override
+            public Dialog getTipAppSettingDialog() {
+                return null;
+            }
+        });
+        boolean isOk = mMyPermissionManager.checkPermission();
+        if (isOk) {
+            init();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        mMyPermissionManager.clearResource();
+        super.onDestroy();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        boolean isOk = mMyPermissionManager.onRequestPermissionsResults(this, requestCode, permissions, grantResults);
+        if (isOk) {
+            init();
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        boolean isOk = mMyPermissionManager.onActivityResults(requestCode);
+        if (isOk) {
+            init();
+        }
+
+        if (data != null) {
+            mUseHQAudio = data.getBooleanExtra("HQA", mUseHQAudio);
+        }
     }
 
     private void initView() {
@@ -73,7 +139,10 @@ public class SplashActivity extends BaseActivity implements View.OnClickListener
         initView();
         // 读取保存的数据
         String roomID = (String) SharedPreferencesUtil.getParam(this, "RoomID", "");
-        mRoomIDET.setText(roomID);
+        if (roomID != null) {
+            mRoomIDET.setText(roomID);
+            mRoomIDET.setSelection(roomID.length());
+        }
 
         // 注册回调函数接收的广播
         mLocalBroadcast = new MyLocalBroadcastReceiver();
@@ -100,12 +169,6 @@ public class SplashActivity extends BaseActivity implements View.OnClickListener
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
-        super.onActivityResult(requestCode, resultCode, intent);
-        mUseHQAudio = intent.getBooleanExtra("HQA", mUseHQAudio);
     }
 
     @Override

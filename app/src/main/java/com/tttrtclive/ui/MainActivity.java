@@ -7,14 +7,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.tttrtclive.Helper.RemoteManager;
+import com.tttrtclive.helper.RemoteManager;
 import com.tttrtclive.LocalConstans;
 import com.tttrtclive.MainApplication;
 import com.tttrtclive.R;
@@ -25,6 +24,8 @@ import com.tttrtclive.callback.PhoneListener;
 import com.tttrtclive.dialog.ExitRoomDialog;
 import com.tttrtclive.utils.MyLog;
 import com.wushuangtech.library.Constants;
+
+import androidx.annotation.Nullable;
 
 public class MainActivity extends BaseActivity {
 
@@ -77,7 +78,10 @@ public class MainActivity extends BaseActivity {
             mPhoneListener = null;
             mTelephonyManager = null;
         }
-        unregisterReceiver(mLocalBroadcast);
+
+        if (mLocalBroadcast != null) {
+            unregisterReceiver(mLocalBroadcast);
+        }
         mTTTEngine.muteLocalAudioStream(false);
         super.onDestroy();
         MyLog.d("MainActivity onDestroy");

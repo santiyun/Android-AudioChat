@@ -1,4 +1,4 @@
-package com.tttrtclive.Helper;
+package com.tttrtclive.helper;
 
 import com.tttrtclive.R;
 import com.tttrtclive.bean.EnterUserInfo;
