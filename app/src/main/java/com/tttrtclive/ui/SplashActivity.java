@@ -7,7 +7,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -131,6 +130,17 @@ public class SplashActivity extends BaseActivity implements View.OnClickListener
         }
     }
 
+    private void init() {
+        initView();
+        // 注册广播接收 SDK 回调的事件通知
+        mLocalBroadcast = new MyLocalBroadcastReceiver();
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(MyTTTRtcEngineEventHandler.TAG);
+        registerReceiver(mLocalBroadcast, filter);
+        // 初始化 SDK
+        initSDK();
+    }
+
     private void initView() {
         mRoomIDET = findViewById(R.id.room_id);
         TextView mVersion = findViewById(R.id.version);
@@ -139,42 +149,37 @@ public class SplashActivity extends BaseActivity implements View.OnClickListener
         mVersion.setText(result);
         findViewById(R.id.enter).setOnClickListener(this);
         findViewById(R.id.set).setOnClickListener(this);
-    }
 
-    private void init() {
-        initView();
+        mDialog = new ProgressDialog(this);
+        mDialog.setCancelable(false);
+        mDialog.setTitle("");
+        mDialog.setMessage(getResources().getString(R.string.ttt_hint_loading_channel));
+
         // 读取保存的数据
         String roomID = (String) SharedPreferencesUtil.getParam(this, "RoomID", "");
         if (roomID != null) {
             mRoomIDET.setText(roomID);
             mRoomIDET.setSelection(roomID.length());
         }
-
-        // 注册回调函数接收的广播
-        mLocalBroadcast = new MyLocalBroadcastReceiver();
-        mDialog = new ProgressDialog(this);
-        mDialog.setCancelable(false);
-        mDialog.setTitle("");
-        mDialog.setMessage(getResources().getString(R.string.ttt_hint_loading_channel));
-        MyLog.d("SplashActivity onCreate.... model : " + Build.MODEL);
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        IntentFilter filter = new IntentFilter();
-        filter.addAction(MyTTTRtcEngineEventHandler.TAG);
-        registerReceiver(mLocalBroadcast, filter);
-    }
+    private void initSDK() {
+        // 创建 SDK 实例对象，请看 MainApplication 类。
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        try {
-            unregisterReceiver(mLocalBroadcast);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        /*
+         * 1.设置频道模式，SDK 默认就是 CHANNEL_PROFILE_COMMUNICATION(通信) 模式，但是 DEMO 显式的设置用于介绍接口。
+         * 注意:该接口是全局接口，退房间不会复位，所以在模式需要发生变化时调用即可，无需每次加入频道都设置。
+         */
+        mTTTEngine.setChannelProfile(Constants.CHANNEL_PROFILE_COMMUNICATION);
+        /*
+         * 2.设置角色身份，CHANNEL_PROFILE_COMMUNICATION 模式下可以设置两种角色
+         * CLIENT_ROLE_BROADCASTER(副播) ：可以理解为麦上用户，默认可以说话。
+         * CLIENT_ROLE_AUDIENCE(观众) ：可以理解为听众，默认只听不发。
+         *
+         * SDK 默认是 CLIENT_ROLE_BROADCASTER 角色，但是 DEMO 显式的设置用于介绍接口。
+         * 注意:该接口是全局接口，退房间不会复位，所以在角色需要发生变化时调用即可，无需每次加入频道都设置。
+         */
+        mTTTEngine.setClientRole(Constants.CLIENT_ROLE_BROADCASTER);
     }
 
     @Override
@@ -206,12 +211,20 @@ public class SplashActivity extends BaseActivity implements View.OnClickListener
 
                 if (mIsLoging) return;
                 mIsLoging = true;
-
+                // 生成一个随机的用户ID
                 Random mRandom = new Random();
                 mUserId = mRandom.nextInt(999999);
-
                 // 保存配置
                 SharedPreferencesUtil.setParam(this, "RoomID", mRoomName);
+                /*
+                 * 3.设置音频编码类型和码率，
+                 * 3.1.建议使用 TTT_AUDIO_CODEC_AAC 格式。TTT_AUDIO_CODEC_ISAC 音质相比 AAC 差一些，TTT_AUDIO_CODEC_OPUS 还在测试阶段。
+                 * 3.2.码率最大值为128，这里设置96。一般使用的有三个档位，从低到高分别是 48、96、128。
+                 * 3.3.声道数选1，一般使用单声道即可。
+                 * 注意:该接口需要每次加入频道都显式设置。
+                 */
+                mTTTEngine.setPreferAudioCodec(Constants.TTT_AUDIO_CODEC_AAC, 96, 1);
+                // 4.加入频道
                 mTTTEngine.joinChannel("", mRoomName, mUserId);
                 mDialog.show();
                 break;

@@ -62,6 +62,7 @@ public class MainActivity extends BaseActivity {
         if (mTelephonyManager != null) {
             mTelephonyManager.listen(mPhoneListener, PhoneStateListener.LISTEN_CALL_STATE);
         }
+        // 启用音量上报功能，对应的回调事件为 TTTRtcEngineEventHandler 的 onAudioVolumeIndication，在 MyTTTRtcEngineEventHandler 中实现。
         mTTTEngine.enableAudioVolumeIndication(300, 3);
         MyLog.d("MainActivity onCreate");
     }
