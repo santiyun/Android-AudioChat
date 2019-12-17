@@ -162,6 +162,7 @@ public class MainActivity extends BaseActivity {
     public void exitRoom() {
         MyLog.d("exitRoom was called!... leave room");
         mTTTEngine.leaveChannel();
+        setResult(SplashActivity.ACTIVITY_MAIN);
         finish();
     }
 

@@ -34,6 +34,9 @@ import androidx.appcompat.app.AlertDialog;
 
 public class SplashActivity extends BaseActivity implements View.OnClickListener {
 
+    public static final int ACTIVITY_MAIN = 100;
+    public static final int ACTIVITY_SETTING = 101;
+
     private ProgressDialog mDialog;
     private MyLocalBroadcastReceiver mLocalBroadcast;
     private MyPermissionManager mMyPermissionManager;
@@ -101,6 +104,12 @@ public class SplashActivity extends BaseActivity implements View.OnClickListener
         if (mMyPermissionManager != null) {
             mMyPermissionManager.clearResource();
         }
+
+        try {
+            unregisterReceiver(mLocalBroadcast);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         super.onDestroy();
     }
 
@@ -118,27 +127,26 @@ public class SplashActivity extends BaseActivity implements View.OnClickListener
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (mMyPermissionManager != null) {
-            boolean isOk = mMyPermissionManager.onActivityResults(requestCode);
-            if (isOk) {
-                init();
-            }
+        switch (requestCode) {
+            case MyPermissionManager.REQUEST_SETTING_CODE:
+                if (mMyPermissionManager != null) {
+                    boolean isOk = mMyPermissionManager.onActivityResults(requestCode);
+                    if (isOk) {
+                        init();
+                    }
+                }
+                break;
+            case ACTIVITY_MAIN:
+                if (mDialog != null) {
+                    mDialog.dismiss();
+                }
+                break;
+            case ACTIVITY_SETTING:
+                if (data != null) {
+                    mUseHQAudio = data.getBooleanExtra("HQA", mUseHQAudio);
+                }
+                break;
         }
-
-        if (data != null) {
-            mUseHQAudio = data.getBooleanExtra("HQA", mUseHQAudio);
-        }
-    }
-
-    private void init() {
-        initView();
-        // 注册广播接收 SDK 回调的事件通知
-        mLocalBroadcast = new MyLocalBroadcastReceiver();
-        IntentFilter filter = new IntentFilter();
-        filter.addAction(MyTTTRtcEngineEventHandler.TAG);
-        registerReceiver(mLocalBroadcast, filter);
-        // 初始化 SDK
-        initSDK();
     }
 
     private void initView() {
@@ -154,13 +162,24 @@ public class SplashActivity extends BaseActivity implements View.OnClickListener
         mDialog.setCancelable(false);
         mDialog.setTitle("");
         mDialog.setMessage(getResources().getString(R.string.ttt_hint_loading_channel));
+    }
 
+    private void init() {
+        // 初始化组件
+        initView();
         // 读取保存的数据
         String roomID = (String) SharedPreferencesUtil.getParam(this, "RoomID", "");
         if (roomID != null) {
             mRoomIDET.setText(roomID);
             mRoomIDET.setSelection(roomID.length());
         }
+        // 注册广播接收 SDK 回调的事件通知
+        mLocalBroadcast = new MyLocalBroadcastReceiver();
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(MyTTTRtcEngineEventHandler.TAG);
+        registerReceiver(mLocalBroadcast, filter);
+        // 初始化 SDK
+        initSDK();
     }
 
     private void initSDK() {
@@ -231,7 +250,7 @@ public class SplashActivity extends BaseActivity implements View.OnClickListener
             case R.id.set:
                 Intent intent = new Intent(this, SetActivity.class);
                 intent.putExtra("HQA", mUseHQAudio);
-                startActivityForResult(intent, 1);
+                startActivityForResult(intent, ACTIVITY_SETTING);
                 break;
         }
     }
@@ -246,12 +265,11 @@ public class SplashActivity extends BaseActivity implements View.OnClickListener
                 switch (mJniObjs.mJniType) {
                     case LocalConstans.CALL_BACK_ON_ENTER_ROOM:
                         //界面跳转
-                        Intent activityIntent = new Intent();
-                        activityIntent.putExtra("ROOM_ID", Long.parseLong(mRoomName));
-                        activityIntent.putExtra("USER_ID", mUserId);
-                        activityIntent.setClass(SplashActivity.this, MainActivity.class);
-                        startActivity(activityIntent);
-                        mDialog.dismiss();
+                        Intent i = new Intent();
+                        i.putExtra("ROOM_ID", Long.parseLong(mRoomName));
+                        i.putExtra("USER_ID", mUserId);
+                        i.setClass(SplashActivity.this, MainActivity.class);
+                        startActivityForResult(i, ACTIVITY_MAIN);
                         mIsLoging = false;
                         break;
                     case LocalConstans.CALL_BACK_ON_ERROR:

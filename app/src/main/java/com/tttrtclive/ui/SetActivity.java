@@ -53,7 +53,7 @@ public class SetActivity extends BaseActivity implements View.OnClickListener, C
     private void exit() {
         Intent intent = new Intent();
         intent.putExtra("HQA", mUseHQAudio);
-        setResult(1, intent);
+        setResult(SplashActivity.ACTIVITY_SETTING, intent);
         finish();
     }
 }
