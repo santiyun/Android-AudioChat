@@ -235,14 +235,12 @@ public class SplashActivity extends BaseActivity implements View.OnClickListener
                 mUserId = mRandom.nextInt(999999);
                 // 保存配置
                 SharedPreferencesUtil.setParam(this, "RoomID", mRoomName);
-                /*
-                 * 3.设置音频编码类型和码率，
-                 * 3.1.建议使用 TTT_AUDIO_CODEC_AAC 格式。TTT_AUDIO_CODEC_ISAC 音质相比 AAC 差一些，TTT_AUDIO_CODEC_OPUS 还在测试阶段。
-                 * 3.2.码率最大值为128，这里设置96。一般使用的有三个档位，从低到高分别是 48、96、128。
-                 * 3.3.声道数选1，一般使用单声道即可。
-                 * 注意:该接口需要每次加入频道都显式设置。
-                 */
-                mTTTEngine.setPreferAudioCodec(Constants.TTT_AUDIO_CODEC_AAC, 96, 1);
+                // 3.设置音频编码参数，SDK 默认为 ISAC 音频编码格式，32kbps 音频码率，适用于通话；高音质选用 AAC 格式编码，码率设置为96kbps。
+                if (mUseHQAudio) {
+                    mTTTEngine.setPreferAudioCodec(Constants.TTT_AUDIO_CODEC_AAC, 96, 1);
+                } else {
+                    mTTTEngine.setPreferAudioCodec(Constants.TTT_AUDIO_CODEC_ISAC, 32, 1);
+                }
                 // 4.加入频道
                 mTTTEngine.joinChannel("", mRoomName, mUserId);
                 mDialog.show();

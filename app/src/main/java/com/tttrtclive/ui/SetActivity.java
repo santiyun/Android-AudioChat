@@ -7,9 +7,8 @@ import android.widget.CompoundButton;
 import android.widget.Switch;
 
 import com.tttrtclive.R;
-import com.wushuangtech.wstechapi.TTTRtcEngine;
 
-public class SetActivity extends BaseActivity implements View.OnClickListener, CompoundButton.OnCheckedChangeListener{
+public class SetActivity extends BaseActivity implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
 
     /*-------------------------------配置参数---------------------------------*/
     public boolean mUseHQAudio = false;
@@ -35,7 +34,6 @@ public class SetActivity extends BaseActivity implements View.OnClickListener, C
 
     @Override
     public void onClick(View v) {
-        TTTRtcEngine.getInstance().setHighQualityAudioParameters(mUseHQAudio);
         exit();
     }
 
