@@ -13,7 +13,6 @@ import android.text.TextUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.tttrtclive.helper.RemoteManager;
 import com.tttrtclive.LocalConstans;
 import com.tttrtclive.MainApplication;
 import com.tttrtclive.R;
@@ -22,6 +21,7 @@ import com.tttrtclive.bean.JniObjs;
 import com.tttrtclive.callback.MyTTTRtcEngineEventHandler;
 import com.tttrtclive.callback.PhoneListener;
 import com.tttrtclive.dialog.ExitRoomDialog;
+import com.tttrtclive.helper.RemoteManager;
 import com.tttrtclive.utils.MyLog;
 import com.wushuangtech.library.Constants;
 
@@ -83,6 +83,8 @@ public class MainActivity extends BaseActivity {
         if (mLocalBroadcast != null) {
             unregisterReceiver(mLocalBroadcast);
         }
+
+        mTTTEngine.setEnableSpeakerphone(true);
         mTTTEngine.muteLocalAudioStream(false);
         super.onDestroy();
         MyLog.d("MainActivity onDestroy");
@@ -252,6 +254,9 @@ public class MainActivity extends BaseActivity {
                             mIsHeadset = true;
                             mAudioChannel.setImageResource(mIsMute ? R.drawable.mainly_btn_muted_headset_selector : R.drawable.mainly_btn_headset_selector);
                         }
+
+                        mIsYsq = mAudioRoute == Constants.AUDIO_ROUTE_SPEAKER;
+                        ((ImageView) findViewById(R.id.main_btn_audio_ysq)).setImageResource(mIsYsq ? R.drawable.mainly_btn_ysq_selector : R.drawable.mainly_btn_tt_selector);
                         break;
                     case LocalConstans.CALL_BACK_ON_PHONE_LISTENER_COME:
                         mIsPhoneComing = true;

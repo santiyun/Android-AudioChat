@@ -20,7 +20,6 @@ import com.tttrtclive.bean.JniObjs;
 import com.tttrtclive.bean.MyPermissionBean;
 import com.tttrtclive.callback.MyTTTRtcEngineEventHandler;
 import com.tttrtclive.helper.MyPermissionManager;
-import com.tttrtclive.utils.MyLog;
 import com.tttrtclive.utils.SharedPreferencesUtil;
 import com.wushuangtech.library.Constants;
 import com.wushuangtech.wstechapi.TTTRtcEngine;
@@ -272,7 +271,6 @@ public class SplashActivity extends BaseActivity implements View.OnClickListener
                         break;
                     case LocalConstans.CALL_BACK_ON_ERROR:
                         int errorType = mJniObjs.mErrorType;
-                        MyLog.d("onReceive CALL_BACK_ON_ERROR errorType : " + errorType);
                         if (errorType == Constants.ERROR_ENTER_ROOM_INVALIDCHANNELNAME) {
                             Toast.makeText(mContext, mContext.getResources().getString(R.string.ttt_error_enterchannel_format), Toast.LENGTH_SHORT).show();
                         } else if (errorType == Constants.ERROR_ENTER_ROOM_TIMEOUT) {
