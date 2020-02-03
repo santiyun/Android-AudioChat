@@ -189,7 +189,7 @@ public class MainActivity extends BaseActivity {
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
             if (MyTTTRtcEngineEventHandler.TAG.equals(action)) {
-                JniObjs mJniObjs = intent.getParcelableExtra(MyTTTRtcEngineEventHandler.MSG_TAG);
+                JniObjs mJniObjs = (JniObjs) intent.getSerializableExtra(MyTTTRtcEngineEventHandler.MSG_TAG);
                 switch (mJniObjs.mJniType) {
                     case LocalConstans.CALL_BACK_ON_USER_KICK:
                         MyLog.d("UI onReceive CALL_BACK_ON_USER_KICK... ");
@@ -231,11 +231,11 @@ public class MainActivity extends BaseActivity {
                         break;
                     case LocalConstans.CALL_BACK_ON_REMOTE_AUDIO_STATE:
                         String string = getResources().getString(R.string.ttt_audio_downspeed);
-                        String result = String.format(string, String.valueOf(mJniObjs.mRemoteAudioStats.getReceivedBitrate()));
-                        mRemoteManager.updateBitrate(mJniObjs.mRemoteAudioStats.getUid(), result);
+                        String result = String.format(string, String.valueOf(mJniObjs.mAudioRecvBitrate));
+                        mRemoteManager.updateBitrate(mJniObjs.mUid, result);
                         break;
                     case LocalConstans.CALL_BACK_ON_LOCAL_AUDIO_STATE:
-                        setTextViewContent(mAudioSpeedShow, R.string.ttt_audio_upspeed, String.valueOf(mJniObjs.mLocalAudioStats.getSentBitrate()));
+                        setTextViewContent(mAudioSpeedShow, R.string.ttt_audio_upspeed, String.valueOf(mJniObjs.mAudioSentBitrate));
                         break;
                     case LocalConstans.CALL_BACK_ON_MUTE_AUDIO:
                         long muteUid = mJniObjs.mUid;
