@@ -29,12 +29,18 @@ public class SetActivity extends BaseActivity implements View.OnClickListener, C
     }
 
     public void onExitButtonClick(View v) {
-        exit();
+        exit(false);
     }
 
     @Override
     public void onClick(View v) {
-        exit();
+        exit(true);
+    }
+
+    @Override
+    public void onBackPressed() {
+        exit(false);
+        super.onBackPressed();
     }
 
     @Override
@@ -42,15 +48,11 @@ public class SetActivity extends BaseActivity implements View.OnClickListener, C
         mUseHQAudio = isChecked;
     }
 
-    @Override
-    public void onBackPressed() {
-        exit();
-        super.onBackPressed();
-    }
-
-    private void exit() {
+    private void exit(boolean saveSetting) {
         Intent intent = new Intent();
-        intent.putExtra("HQA", mUseHQAudio);
+        if (saveSetting) {
+            intent.putExtra("HQA", mUseHQAudio);
+        }
         setResult(SplashActivity.ACTIVITY_SETTING, intent);
         finish();
     }

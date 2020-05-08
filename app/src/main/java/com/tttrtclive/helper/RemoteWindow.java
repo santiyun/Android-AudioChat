@@ -11,7 +11,7 @@ import android.widget.TextView;
 import com.tttrtclive.R;
 import com.tttrtclive.bean.EnterUserInfo;
 
-public class AudioRemoteWindow extends RelativeLayout {
+public class RemoteWindow extends RelativeLayout {
 
     public long mId = -1;
     private boolean mIsMuted;
@@ -20,9 +20,9 @@ public class AudioRemoteWindow extends RelativeLayout {
     private TextView mIdView;
     private TextView mAudioBitrate;
 
-    public AudioRemoteWindow(Context context, AttributeSet attrs) {
+    public RemoteWindow(Context context, AttributeSet attrs) {
         super(context, attrs);
-        View v = LayoutInflater.from(context).inflate(R.layout.audio_remote_window,this, true);
+        View v = LayoutInflater.from(context).inflate(R.layout.audio_remote_window, this, true);
         mSpeakImage = v.findViewById(R.id.speakimage);
         mIdView = v.findViewById(R.id.id);
         mAudioBitrate = v.findViewById(R.id.audiorate);
@@ -55,7 +55,6 @@ public class AudioRemoteWindow extends RelativeLayout {
 
     public void updateSpeakState(int volumeLevel) {
         if (mIsMuted) return;
-
         if (volumeLevel >= 0 && volumeLevel <= 3) {
             mSpeakImage.setImageResource(R.drawable.mainly_btn_speaker_selector);
         } else if (volumeLevel > 3 && volumeLevel <= 6) {

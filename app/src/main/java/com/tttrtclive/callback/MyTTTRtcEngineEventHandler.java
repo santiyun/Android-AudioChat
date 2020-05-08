@@ -12,9 +12,6 @@ import com.wushuangtech.expansion.bean.RemoteAudioStats;
 import com.wushuangtech.expansion.bean.RtcStats;
 import com.wushuangtech.wstechapi.TTTRtcEngineEventHandler;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import static com.tttrtclive.LocalConstans.CALL_BACK_ON_AUDIO_ROUTE;
 import static com.tttrtclive.LocalConstans.CALL_BACK_ON_AUDIO_VOLUME_INDICATION;
 import static com.tttrtclive.LocalConstans.CALL_BACK_ON_CONNECTLOST;
@@ -38,13 +35,10 @@ public class MyTTTRtcEngineEventHandler extends TTTRtcEngineEventHandler {
 
     public static final String TAG = "MyTTTRtcEngineEventHandler_AudioChat";
     public static final String MSG_TAG = "MyTTTRtcEngineEventHandlerMSG_AudioChat";
-    private boolean mIsSaveCallBack;
-    private List<JniObjs> mSaveCallBack;
     private Context mContext;
 
     public MyTTTRtcEngineEventHandler(Context mContext) {
         this.mContext = mContext;
-        mSaveCallBack = new ArrayList<>();
     }
 
     /**
@@ -64,7 +58,6 @@ public class MyTTTRtcEngineEventHandler extends TTTRtcEngineEventHandler {
         mJniObjs.mChannelName = channel;
         mJniObjs.mUid = uid;
         sendMessage(mJniObjs);
-        mIsSaveCallBack = true;
     }
 
     /**
@@ -90,15 +83,11 @@ public class MyTTTRtcEngineEventHandler extends TTTRtcEngineEventHandler {
      */
     @Override
     public void onError(final int errorType) {
-        MyLog.i(TAG, "onError.... errorType ： " + errorType + "mIsSaveCallBack : " + mIsSaveCallBack);
+        MyLog.i(TAG, "onError.... errorType ： " + errorType);
         JniObjs mJniObjs = new JniObjs();
         mJniObjs.mJniType = CALL_BACK_ON_ERROR;
         mJniObjs.mErrorType = errorType;
-        if (mIsSaveCallBack) {
-            saveCallBack(mJniObjs);
-        } else {
-            sendMessage(mJniObjs);
-        }
+        sendMessage(mJniObjs);
     }
 
     /**
@@ -115,15 +104,11 @@ public class MyTTTRtcEngineEventHandler extends TTTRtcEngineEventHandler {
      */
     @Override
     public void onUserKicked(long uid, int reason) {
-        MyLog.i(TAG, "onUserKicked.... uid ： " + uid + "reason : " + reason + "mIsSaveCallBack : " + mIsSaveCallBack);
+        MyLog.i(TAG, "onUserKicked.... uid ： " + uid + "reason : " + reason);
         JniObjs mJniObjs = new JniObjs();
         mJniObjs.mJniType = LocalConstans.CALL_BACK_ON_USER_KICK;
         mJniObjs.mErrorType = reason;
-        if (mIsSaveCallBack) {
-            saveCallBack(mJniObjs);
-        } else {
-            sendMessage(mJniObjs);
-        }
+        sendMessage(mJniObjs);
     }
 
     /**
@@ -144,16 +129,12 @@ public class MyTTTRtcEngineEventHandler extends TTTRtcEngineEventHandler {
      */
     @Override
     public void onUserJoined(long uid, int identity, int elapsed) {
-        MyLog.i(TAG, "onUserJoined.... uid ： " + uid + " | identity : " + identity + " | mIsSaveCallBack : " + mIsSaveCallBack);
+        MyLog.i(TAG, "onUserJoined.... uid ： " + uid + " | identity : " + identity);
         JniObjs mJniObjs = new JniObjs();
         mJniObjs.mJniType = CALL_BACK_ON_USER_JOIN;
         mJniObjs.mUid = uid;
         mJniObjs.mIdentity = identity;
-        if (mIsSaveCallBack) {
-            saveCallBack(mJniObjs);
-        } else {
-            sendMessage(mJniObjs);
-        }
+        sendMessage(mJniObjs);
     }
 
     /**
@@ -176,11 +157,7 @@ public class MyTTTRtcEngineEventHandler extends TTTRtcEngineEventHandler {
         mJniObjs.mJniType = CALL_BACK_ON_USER_OFFLINE;
         mJniObjs.mUid = uid;
         mJniObjs.mReason = reason;
-        if (mIsSaveCallBack) {
-            saveCallBack(mJniObjs);
-        } else {
-            sendMessage(mJniObjs);
-        }
+        sendMessage(mJniObjs);
     }
 
     /**
@@ -197,11 +174,7 @@ public class MyTTTRtcEngineEventHandler extends TTTRtcEngineEventHandler {
         MyLog.i(TAG, "onReconnectServerFailed.... ");
         JniObjs mJniObjs = new JniObjs();
         mJniObjs.mJniType = CALL_BACK_ON_CONNECTLOST;
-        if (mIsSaveCallBack) {
-            saveCallBack(mJniObjs);
-        } else {
-            sendMessage(mJniObjs);
-        }
+        sendMessage(mJniObjs);
     }
 
     /**
@@ -221,11 +194,7 @@ public class MyTTTRtcEngineEventHandler extends TTTRtcEngineEventHandler {
         mJniObjs.mJniType = CALL_BACK_ON_AUDIO_VOLUME_INDICATION;
         mJniObjs.mUid = nUserID;
         mJniObjs.mAudioLevel = audioLevel;
-        if (mIsSaveCallBack) {
-            saveCallBack(mJniObjs);
-        } else {
-            sendMessage(mJniObjs);
-        }
+        sendMessage(mJniObjs);
     }
 
     /**
@@ -244,11 +213,7 @@ public class MyTTTRtcEngineEventHandler extends TTTRtcEngineEventHandler {
         mJniObjs.mJniType = CALL_BACK_ON_REMOTE_AUDIO_STATE;
         mJniObjs.mUid = stats.getUid();
         mJniObjs.mAudioRecvBitrate = stats.getReceivedBitrate();
-        if (mIsSaveCallBack) {
-            saveCallBack(mJniObjs);
-        } else {
-            sendMessage(mJniObjs);
-        }
+        sendMessage(mJniObjs);
     }
 
     /**
@@ -265,11 +230,7 @@ public class MyTTTRtcEngineEventHandler extends TTTRtcEngineEventHandler {
         JniObjs mJniObjs = new JniObjs();
         mJniObjs.mJniType = CALL_BACK_ON_LOCAL_AUDIO_STATE;
         mJniObjs.mAudioSentBitrate = stats.getSentBitrate();
-        if (mIsSaveCallBack) {
-            saveCallBack(mJniObjs);
-        } else {
-            sendMessage(mJniObjs);
-        }
+        sendMessage(mJniObjs);
     }
 
     /**
@@ -286,16 +247,12 @@ public class MyTTTRtcEngineEventHandler extends TTTRtcEngineEventHandler {
      */
     @Override
     public void onUserMuteAudio(long uid, boolean muted) {
-        MyLog.i(TAG, "OnRemoteAudioMuted.... uid : " + uid + " | muted : " + muted + " | mIsSaveCallBack : " + mIsSaveCallBack);
+        MyLog.i(TAG, "OnRemoteAudioMuted.... uid : " + uid + " | muted : " + muted);
         JniObjs mJniObjs = new JniObjs();
         mJniObjs.mJniType = CALL_BACK_ON_MUTE_AUDIO;
         mJniObjs.mUid = uid;
         mJniObjs.mIsDisableAudio = muted;
-        if (mIsSaveCallBack) {
-            saveCallBack(mJniObjs);
-        } else {
-            sendMessage(mJniObjs);
-        }
+        sendMessage(mJniObjs);
     }
 
     /**
@@ -318,11 +275,7 @@ public class MyTTTRtcEngineEventHandler extends TTTRtcEngineEventHandler {
         JniObjs mJniObjs = new JniObjs();
         mJniObjs.mJniType = CALL_BACK_ON_AUDIO_ROUTE;
         mJniObjs.mAudioRoute = routing;
-        if (mIsSaveCallBack) {
-            saveCallBack(mJniObjs);
-        } else {
-            sendMessage(mJniObjs);
-        }
+        sendMessage(mJniObjs);
     }
 
     private void sendMessage(JniObjs mJniObjs) {
@@ -330,21 +283,5 @@ public class MyTTTRtcEngineEventHandler extends TTTRtcEngineEventHandler {
         i.setAction(TAG);
         i.putExtra(MSG_TAG, mJniObjs);
         mContext.sendBroadcast(i);
-    }
-
-    public void setIsSaveCallBack(boolean mIsSaveCallBack) {
-        this.mIsSaveCallBack = mIsSaveCallBack;
-        if (!mIsSaveCallBack) {
-            for (int i = 0; i < mSaveCallBack.size(); i++) {
-                sendMessage(mSaveCallBack.get(i));
-            }
-            mSaveCallBack.clear();
-        }
-    }
-
-    private void saveCallBack(JniObjs mJniObjs) {
-        if (mIsSaveCallBack) {
-            mSaveCallBack.add(mJniObjs);
-        }
     }
 }

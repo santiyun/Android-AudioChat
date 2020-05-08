@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 public class RemoteManager {
 
-    private ArrayList<AudioRemoteWindow> mRemoteWindowList = new ArrayList();
+    private ArrayList<RemoteWindow> mRemoteWindowList = new ArrayList();
 
     public RemoteManager(MainActivity mainActivity) {
         mRemoteWindowList.add(mainActivity.findViewById(R.id.remote1));
@@ -21,9 +21,9 @@ public class RemoteManager {
 
     public void add(EnterUserInfo userInfo) {
         for (int i = 0; i < mRemoteWindowList.size(); i ++) {
-            AudioRemoteWindow audioRemoteWindow = mRemoteWindowList.get(i);
-            if (audioRemoteWindow.mId == -1) {
-                audioRemoteWindow.show(userInfo);
+            RemoteWindow remoteWindow = mRemoteWindowList.get(i);
+            if (remoteWindow.mId == -1) {
+                remoteWindow.show(userInfo);
                 return;
             }
         }
@@ -31,9 +31,9 @@ public class RemoteManager {
 
     public void remove(long id) {
         for (int i = 0; i < mRemoteWindowList.size(); i ++) {
-            AudioRemoteWindow audioRemoteWindow = mRemoteWindowList.get(i);
-            if (audioRemoteWindow.mId == id) {
-                audioRemoteWindow.hide();
+            RemoteWindow remoteWindow = mRemoteWindowList.get(i);
+            if (remoteWindow.mId == id) {
+                remoteWindow.hide();
                 return;
             }
         }
@@ -41,9 +41,9 @@ public class RemoteManager {
 
     public void muteAudio(long id, boolean mute) {
         for (int i = 0; i < mRemoteWindowList.size(); i ++) {
-            AudioRemoteWindow audioRemoteWindow = mRemoteWindowList.get(i);
-            if (audioRemoteWindow.mId == id) {
-                audioRemoteWindow.mute(mute);
+            RemoteWindow remoteWindow = mRemoteWindowList.get(i);
+            if (remoteWindow.mId == id) {
+                remoteWindow.mute(mute);
                 return;
             }
         }
@@ -51,9 +51,9 @@ public class RemoteManager {
 
     public void updateBitrate(long id, String bitrate) {
         for (int i = 0; i < mRemoteWindowList.size(); i ++) {
-            AudioRemoteWindow audioRemoteWindow = mRemoteWindowList.get(i);
-            if (audioRemoteWindow.mId == id) {
-                audioRemoteWindow.updateBitrate(bitrate);
+            RemoteWindow remoteWindow = mRemoteWindowList.get(i);
+            if (remoteWindow.mId == id) {
+                remoteWindow.updateBitrate(bitrate);
                 return;
             }
         }
@@ -61,9 +61,9 @@ public class RemoteManager {
 
     public void updateSpeakState(long id, int volumeLevel) {
         for (int i = 0; i < mRemoteWindowList.size(); i ++) {
-            AudioRemoteWindow audioRemoteWindow = mRemoteWindowList.get(i);
-            if (audioRemoteWindow.mId == id) {
-                audioRemoteWindow.updateSpeakState(volumeLevel);
+            RemoteWindow remoteWindow = mRemoteWindowList.get(i);
+            if (remoteWindow.mId == id) {
+                remoteWindow.updateSpeakState(volumeLevel);
                 return;
             }
         }
